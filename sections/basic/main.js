@@ -9,7 +9,8 @@ const listRepos = async (username) => {
     repo => `
       <li>
         <a href="${repo.html_url}">${repo.name}</a>
-        (stars:${repo.stargazers_count})
+        (✨:${repo.stargazers_count})
+
       </li>
     `
   )
