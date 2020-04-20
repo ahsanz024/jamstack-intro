@@ -1,34 +1,75 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 import styles from './form.module.css';
 
+const INITIAL_STATE = {
+  name: '',
+  subject: '',
+  email: '',
+  body: ''
+};
 
-const form = () => {
+/**
+ * 
+ * @param {*} state current state
+ * @param {*} action { 'type': 'doStuff', name: 'Jason' /* could be anything we want it to be, e.g. `name` *\/ }
+ * 
+ */
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'updateFieldValue':
+      return {...state, [action.field]: [action.value] };
+      break;
+  
+    default:
+      return INITIAL_STATE;
+      break;
+  }
+}
+
+const Form = () => {
+  // state: current state
+  // dispatcher: di
+  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+
+
+  // CURRYING FUNCTION
+  // takes in 1 param, then returns another function, with the second param.
+  const updateFieldValue = field => event => {
+    dispatch({
+      type: 'updateFieldValue',
+      field,
+      value: event.target.value
+    })
+  }
 
   const handleSubmit = event => {
     event.preventDefault();
     // TODO: actually send form
+    console.log(state)
   }
+
+  
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <label className={styles.label}>
         Name
-        <input className={styles.input} name="name" type="text"/>
+        <input className={styles.input} name="name" type="text" value={state.name} onChange={updateFieldValue('name')}/>
       </label>
       <label className={styles.label}>
         Email
-        <input className={styles.input} name="email" type="email"/>
+        <input className={styles.input} name="email" type="email" value={state.email} onChange={updateFieldValue('email')}/>
       </label>
       <label className={styles.label}>
         Subject
-        <input className={styles.input} name="subject" type="text"/>
+        <input className={styles.input} name="subject" type="text" value={state.subject} onChange={updateFieldValue('subject')}/>
       </label>
       <label className={styles.label}>
         Body
-        <textarea className={styles.input} name="subject"/>
+        <textarea className={styles.input} name="subject" value={state.body} onChange={updateFieldValue('body')}/>
       </label>
       <button className={styles.button}>Send</button>
     </form>
   )
 }
 
-export default form;
+export default Form;
