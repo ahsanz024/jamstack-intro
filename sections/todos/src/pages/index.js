@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import style from "./index.module.css";
 import axios from "axios";
+import Todo from "../components/todo";
 
 export default () => {
   const [status, setStatus] = useState("loading");
@@ -33,9 +34,11 @@ export default () => {
     <main>
       <h1 className={style.heading}>JAMStack Todos</h1>
       {todos ? (
-        <ul>
+        <ul className={style.todos}>
           {todos.map((todo) => (
-            <li>TODO: show TODO</li>
+            <li key={todo.key} className={style.todo}>
+              <Todo todo={todo} />
+            </li>
           ))}
         </ul>
       ) : (
